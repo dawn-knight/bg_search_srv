@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.pcs.dao.ExtendedProductLibCategoryMapper">
+	<resultMap id="catList" type="com.mbgo.search.core.filter.category.Category">
+		<id property="cateId" column="cateId" />
+		<result property="parentId" column="parentId" />
+		<result property="cateName" column="cateName" />
+	</resultMap>
+	
+	<select id="getCategoryList" resultMap="catList" >
+		SELECT 
+			category_id AS cateId,
+			parent_id AS parentId,
+			cate_name AS cateName
+		FROM 
+			product_lib_category
+		where
+			status = 1
+	</select>
+
+	<select id="getCategoryById" resultMap="catList" parameterType="java.lang.Integer">
+		SELECT 
+			category_id AS cateId,
+			parent_id AS parentId,
+			cate_name AS cateName
+		FROM 
+			product_lib_category
+		WHERE 
+			category_id = #{categoryId,jdbcType=INTEGER}
+			and status = 1
+	</select>
+	
+	<resultMap id="catIdSubCatIdMapping" type="com.metersbonwe.pcs.bean.CatIdSubCatIdMapping">
+		<id property="catId" column="catid" />
+		<collection property="subCatIds" ofType="java.lang.String" javaType="list">
+			<result column="subcatid" />
+		</collection>
+	</resultMap>
+	<select id="getCatIdSubCatIdMapping" resultMap="catIdSubCatIdMapping">
+		SELECT 
+			c1.category_id as catid,
+		    c2.category_id as subcatid
+		FROM 
+			mbproduct.product_lib_category c1
+		left join
+			mbproduct.product_lib_category c2
+		on
+			c1.category_id = c2.parent_id
+		where
+			c1.status = 1
+		    and c2.status = 1
+			and c2.category_id is not NULL;	
+	</select>
+	
+	<resultMap id="catIdParentIdMapping" type="com.metersbonwe.pcs.bean.CatIdParentIdMapping">
+		<result property="catId" column="catId" />
+		<result property="parentId" column="parentId" />
+	</resultMap>
+	<select id="getCatIdParentIdMapping" resultMap="catIdParentIdMapping">
+		select category_id as catId, parent_id as parentId from product_lib_category where status = 1;
+	</select>
+	
+	<resultMap id="catIdCatNameMapping" type="com.metersbonwe.pcs.bean.CatIdCatNameMapping">
+		<result property="catId" column="catId" />
+		<result property="catName" column="catName" />
+	</resultMap>	
+	<select id="getCatIdCatNameMapping" resultMap="catIdCatNameMapping">
+		select category_id as catId, cate_name as catName from product_lib_category where status = 1;
+	</select>
+	
+	<select id="getAllCats" resultMap="categoryListMap" >
+		select category_id as cateId, cate_name AS cateName, parent_id AS parentId,sort AS sort,level from product_lib_category where status = 1;
+	</select>
+	<resultMap id="categoryListMap" type="com.mbgo.search.core.filter.category.Category">
+		<id property="cateId" column="cateId" />
+		<result property="parentId" column="parentId" />
+		<result property="cateName" column="cateName" />
+		<result property="sort" column="sort" />
+		<result property="level" column="level" />
+	</resultMap>
+	
+	<select id="getCatIdCatNameLevelMapping" resultMap="CatIdCatNameLevelMapping">
+		select category_id as catId, cate_name as catName,parent_id as parentId, level as level from product_lib_category category where status = 1;
+	</select>
+	
+	<resultMap id="CatIdCatNameLevelMapping" type="com.metersbonwe.pcs.bean.CatIdCatNameLevelMapping">
+		<result property="catId" column="catId" />
+		<result property="catName" column="catName" />
+		<result property="parentId" column="parentId" />
+		<result property="level" column="level" />
+	</resultMap>
+	
+</mapper>

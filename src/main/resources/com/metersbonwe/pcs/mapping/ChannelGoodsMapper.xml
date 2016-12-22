@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.pcs.dao.ChannelGoodsMapper">
+	<resultMap id="channelGoodsMap" type="com.metersbonwe.pcs.bean.ChannelGoodsMapping">
+		<result column="seller_code" property="sellerCode" jdbcType="VARCHAR"></result>
+		<result column="channel_code" property="channelCode" jdbcType="VARCHAR"></result>
+		<result column="product_sys_code" property="sysCode" jdbcType="VARCHAR"></result>
+		<result column="sale_count" property="saleCount" jdbcType="INTEGER"></result>
+		<result column="sale_count_week" property="saleCountWeek"
+			jdbcType="INTEGER"></result>
+		<result column="sale_count_month" property="saleCountMonth"
+			jdbcType="INTEGER"></result>
+	</resultMap>
+	<select id="getChannelGoodsList" resultMap="channelGoodsMap">
+		select seller_code as sellerCode,channel_code as
+		channelCode,product_sys_code as sysCode,sale_count as saleCount,
+		sale_count_week as saleCountWeek,sale_count_month as saleCountMonth
+		from statistic_channel_goods where channel_code ="HQ01S116"
+	</select>
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbgo.mybatis.mbstore.mapper.MallSecondGoodsMapper">
+	<resultMap id="BaseResultMap" type="com.mbgo.mybatis.mbstore.bean.MallSecondGoods">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="gid" property="gid" jdbcType="VARCHAR" />
+		<result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="s_code" property="sCode" jdbcType="VARCHAR" />
+		<result column="second_price" property="secondPrice" jdbcType="DECIMAL" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
+	</resultMap>
+
+
+	<!-- 自定义 -->
+	<select id="getReturnProductIdAndSecondPriceBeanByProductIds"
+		resultMap="secondPriceMap" parameterType="java.util.List">
+		SELECT msg.gid,msg.second_price FROM mall_second_goods AS msg
+		,mall_second_list AS msl WHERE msg.s_code = msl.s_code AND msg.status
+		= 1 AND msl.s_status = 1 AND NOW() >= msl.start_time AND msl.end_time
+		>= NOW() AND msg.gid IN
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<resultMap id="secondPriceMap"
+		type="com.mbgo.mybatis.mbstore.bean.ReturnProductIdAndSecondPriceBean">
+		<id property="productId" column="gid" />
+		<result property="secondPrice" column="second_price" />
+	</resultMap>
+
+
+
+
+</mapper>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbgo.mybatis.mbsearch.mapper.MgrHotSearchKeywordMapper" >
+  <resultMap id="BaseResultMap" type="com.mbgo.mybatis.mbsearch.bean.MgrHotSearchKeyword" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="word" property="word" jdbcType="VARCHAR" />
+    <result column="sort_index" property="sortIndex" jdbcType="INTEGER" />
+    <result column="index_level" property="indexLevel" jdbcType="INTEGER" />
+    <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="VARCHAR" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, word, sort_index, index_level, channel_id, category_id, add_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mgr_hot_search_keyword
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mgr_hot_search_keyword
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mbgo.mybatis.mbsearch.bean.MgrHotSearchKeyword" >
+    insert into mgr_hot_search_keyword (id, word, sort_index, 
+      index_level, channel_id, category_id, 
+      add_time)
+    values (#{id,jdbcType=INTEGER}, #{word,jdbcType=VARCHAR}, #{sortIndex,jdbcType=INTEGER}, 
+      #{indexLevel,jdbcType=INTEGER}, #{channelId,jdbcType=VARCHAR}, #{categoryId,jdbcType=VARCHAR}, 
+      #{addTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mbgo.mybatis.mbsearch.bean.MgrHotSearchKeyword" >
+    insert into mgr_hot_search_keyword
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="word != null" >
+        word,
+      </if>
+      <if test="sortIndex != null" >
+        sort_index,
+      </if>
+      <if test="indexLevel != null" >
+        index_level,
+      </if>
+      <if test="channelId != null" >
+        channel_id,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="word != null" >
+        #{word,jdbcType=VARCHAR},
+      </if>
+      <if test="sortIndex != null" >
+        #{sortIndex,jdbcType=INTEGER},
+      </if>
+      <if test="indexLevel != null" >
+        #{indexLevel,jdbcType=INTEGER},
+      </if>
+      <if test="channelId != null" >
+        #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mbgo.mybatis.mbsearch.bean.MgrHotSearchKeyword" >
+    update mgr_hot_search_keyword
+    <set >
+      <if test="word != null" >
+        word = #{word,jdbcType=VARCHAR},
+      </if>
+      <if test="sortIndex != null" >
+        sort_index = #{sortIndex,jdbcType=INTEGER},
+      </if>
+      <if test="indexLevel != null" >
+        index_level = #{indexLevel,jdbcType=INTEGER},
+      </if>
+      <if test="channelId != null" >
+        channel_id = #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mbgo.mybatis.mbsearch.bean.MgrHotSearchKeyword" >
+    update mgr_hot_search_keyword
+    set word = #{word,jdbcType=VARCHAR},
+      sort_index = #{sortIndex,jdbcType=INTEGER},
+      index_level = #{indexLevel,jdbcType=INTEGER},
+      channel_id = #{channelId,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="com.mbgo.search.core.bean.keyword.HotWordQuery">
+    select 
+    <include refid="Base_Column_List" />
+    from mgr_hot_search_keyword
+	<trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="indexLevel != null" >
+        index_level = #{indexLevel,jdbcType=INTEGER},
+      </if>
+      <if test="channelId != null" >
+        channel_id = #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=VARCHAR},
+      </if>
+	</trim>
+	ORDER BY sort_index DESC
+	limit #{limit, jdbcType=INTEGER}
+  </select>
+</mapper>

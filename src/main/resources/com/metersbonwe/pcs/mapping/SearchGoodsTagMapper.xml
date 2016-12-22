@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.pcs.dao.SearchGoodsTagMapper">
+	<resultMap id="productTagsMap" type="com.mbgo.search.core.bean.index.Product">
+		<id property="productId" column="productId" />
+		<collection property="tags" javaType="java.lang.String">
+			<result column="ptag" />
+		</collection>
+	</resultMap>
+
+	<!-- 自定义 -->
+	<select id="getProductTags" resultMap="productTagsMap"
+		parameterType="com.mbgo.mybatis.commonbean.MybatisBean">
+		select
+		search_goods_tag.product_sys_code productId,
+		search_tag.name ptag
+		from search_tag
+		right join
+		search_goods_tag
+		on search_tag.tag_id =
+		search_goods_tag.tag_id
+		where
+		search_tag.status = 1
+		and now() >=
+		search_tag.start_time
+		and search_tag.end_time >= now()
+		<if test="params != null and params.size > 0">
+			and
+			<foreach item="item" index="index" collection="params" open="("
+				separator=" or " close=")">
+				search_goods_tag.product_sys_code = #{item,
+				jdbcType=VARCHAR}
+			</foreach>
+		</if>
+		<if test="params == null or params.size == 0 and max > 0 and first >= 0">
+			LIMIT #{first, jdbcType=BIGINT}, #{max, jdbcType=BIGINT}
+		</if>
+	</select>
+
+
+	<!-- 自定义 -->
+	<select id="getDisplayTag" resultMap="displayTagsMap"
+		parameterType="com.mbgo.mybatis.commonbean.MybatisBean">
+		select
+		search_goods_tag.product_sys_code productId,
+		search_tag.name
+		tagName,
+		search_tag.sort tagSort
+		from search_tag
+		right join
+		search_goods_tag
+		on search_tag.tag_id =
+		search_goods_tag.tag_id
+		where
+		search_tag.status = 1
+		AND
+		search_tag.is_show = 1
+		and now() >=
+		search_tag.start_time
+		and
+		search_tag.end_time >= now()
+		<if test="params != null and params.size > 0">
+			and
+			<foreach item="item" index="index" collection="params" open="("
+				separator=" or " close=")">
+				search_goods_tag.product_sys_code = #{item,
+				jdbcType=VARCHAR}
+			</foreach>
+		</if>
+		<if test="params == null or params.size == 0 and max > 0 and first >= 0">
+			LIMIT #{first, jdbcType=BIGINT}, #{max, jdbcType=BIGINT}
+		</if>
+	</select>
+
+
+
+	<!-- 自定义 -->
+	<resultMap id="displayTagsMap" type="com.mbgo.search.core.bean.index.Product">
+		<id property="productId" column="productId" />
+		<result property="displayTag" column="tagName" />
+		<result property="displayTagSort" column="tagSort" />
+	</resultMap>
+
+	<!-- 获取所有productId，定时更新 -->
+	<select id="getAllProductIds" resultType="java.lang.String"
+		parameterType="com.mbgo.mybatis.commonbean.GettingUpdatedChannelGoodIdListParam">
+		SELECT
+		product_sys_code
+		FROM
+		search_goods_tag
+		WHERE
+		tag_id
+		IN
+		(SELECT
+		tag_id
+		FROM
+		search_tag
+		WHERE
+		last_update_date >=
+		#{updatedTimePointStr}
+
+		UNION
+		SELECT
+		tag_id
+		FROM
+		search_tag
+		WHERE
+		STATUS = 1)
+		GROUP BY
+		product_sys_code
+	</select>
+
+
+</mapper>

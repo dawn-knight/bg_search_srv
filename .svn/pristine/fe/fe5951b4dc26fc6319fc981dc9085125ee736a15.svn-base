@@ -1,0 +1,61 @@
+#solr cloud model configuration
+search.zkHost=10.100.200.128:2181,10.100.200.129:2181,10.100.200.130:2181
+
+
+index.server=http://10.100.20.248:8983
+search.server_1=http://10.100.20.248:8983
+search.server_2=http://10.100.20.248:8983
+search.server_3=http://10.100.20.248:8983
+
+#mbshop.datasource.url=jdbc:mysql://10.100.200.22:3307/mbshop?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&autoReconnect=true&preferredTestQuery=select now()
+#mbshop.datasource.driverClassName=com.mysql.jdbc.Driver
+#mbshop.datasource.username=openmall
+#mbshop.datasource.password=123
+
+#use mbproduct instead of mbshop to get new structured product info
+mbproduct.datasource.url=jdbc:mysql://10.100.22.236:3307/mbproduct?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&autoReconnect=true&preferredTestQuery=select now()
+mbproduct.datasource.driverClassName=com.mysql.jdbc.Driver
+mbproduct.datasource.username=openmall
+mbproduct.datasource.password=123
+
+mbstore.datasource.url=jdbc:mysql://10.100.200.22:3307/mbstore?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&autoReconnect=true&preferredTestQuery=select now()
+mbstore.datasource.driverClassName=com.mysql.jdbc.Driver
+mbstore.datasource.username=openmall
+mbstore.datasource.password=123
+
+mbsearch.datasource.url=jdbc:mysql://10.100.200.22:3307/MBSearchDB?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&autoReconnect=true&preferredTestQuery=select now()
+mbsearch.datasource.driverClassName=com.mysql.jdbc.Driver
+mbsearch.datasource.username=openmall
+mbsearch.datasource.password=123
+
+openshop.datasource.url=jdbc:mysql://10.100.200.22:3307/openshop?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&autoReconnect=true&preferredTestQuery=select now()
+openshop.datasource.driverClassName=com.mysql.jdbc.Driver
+openshop.datasource.username=openmall
+openshop.datasource.password=123
+
+mborg.datasource.url=jdbc:mysql://10.100.200.22:3307/mborg?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&autoReconnect=true&preferredTestQuery=select now()
+mborg.datasource.driverClassName=com.mysql.jdbc.Driver
+mborg.datasource.username=openmall
+mborg.datasource.password=123
+
+mbstock.datasource.url=jdbc:mysql://10.100.200.22:3307/mbStock?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&autoReconnect=true&preferredTestQuery=select now()
+mbstock.datasource.driverClassName=com.mysql.jdbc.Driver
+mbstock.datasource.username=openmall
+mbstock.datasource.password=123
+
+#redis.host=10.100.20.240
+redis.host=10.100.200.41
+redis.port=6379
+
+MASTER_HOST_PORT_TIME=10.100.20.246:8888:2000;10.100.20.245:8888:2000
+SLAVER_HOST_PORT_TIME=10.100.20.246:8889:2000;10.100.20.245:8889:2000
+
+dubbo.server.port=80
+dubbo.server.context=MBgoSearchSrv/dubbo
+#dubbo.registry=dubbo1.zookeeper.db.wx:2181,dubbo2.zookeeper.db.wx:2181,dubbo3.zookeeper.db.wx:2181
+dubbo.registry=10.100.200.128:2181,10.100.200.129:2181,10.100.200.130:2181
+
+SEARCH_MANAGER_LOG_URL=http://10.100.20.248:8080/MBgoSearchManagerSrv/baseKetword/updateSearch
+
+master.url=http://10.100.20.248/solr/{block}/replication?command=
+master.block=goods,goodsColor,spell,autokey,indkey

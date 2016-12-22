@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.pcs.dao.ProductLibAttributeMapper">
+	<resultMap id="colorResultMap" type="com.mbgo.mybatis.mbshop.bean.ProductLibColor" >
+		<id column="attr_value_id" property="id" jdbcType="INTEGER" />
+		<result column="attr_value_code" property="colorCode" jdbcType="VARCHAR" />
+		<result column="attr_value" property="colorName" jdbcType="VARCHAR" />
+		<result column="color_value" property="colorValue" jdbcType="VARCHAR" />
+		<result column="color_alias" property="colorAlias" jdbcType="VARCHAR" />
+		<result column="color_note" property="colorNote" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="TINYINT" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="create_date" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="last_update_date" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<select id="getColorList" resultMap="colorResultMap" >
+		select 
+			product_lib_attr_value.attr_value_id, 
+		    product_lib_attr_value.attr_value_code, 
+		    attr_value, 
+		    color_value, 
+		    '' as color_alias, 
+		    '' as color_note, 
+		    sort, 
+		    status, 
+		    create_date, 
+		    last_update_date
+		from 
+			product_lib_attr_value 
+		left join 
+			product_lib_series_color 
+		on 
+			product_lib_attr_value.attr_value_id = product_lib_series_color.attr_value_id
+		where 
+			attr_key_id = 1 
+		    and status = 1
+    </select>
+	
+	<resultMap id="sizeMap" type="com.mbgo.search.core.filter.size.SizeBean">
+		<result property="sizeCode" column="sizeCode" />
+		<result property="sizeName" column="sizeName" />
+	</resultMap>
+	<select id="getSizeList" resultMap="sizeMap"  >
+		SELECT attr_value_code AS sizeCode, attr_value AS sizeName FROM product_lib_attr_value where attr_key_id = 2 and status = 1;
+	</select>
+	
+	<resultMap id="attributeKeyList" type="com.mbgo.search.core.filter.attr.AttributeBean">
+		<result property="code" column="keyId" />
+		<result property="name" column="keyName" />
+	</resultMap>
+	<select id="getAttributeKeyList" resultMap="attributeKeyList">
+		SELECT attr_key_id AS keyId, attr_key_name AS keyName FROM product_lib_attr_key WHERE status = 1;
+	</select>
+	
+	<resultMap id="attributeValueList" type="com.mbgo.search.core.filter.attr.AttributeBean">
+		<result property="code" column="valueId" />
+		<result property="name" column="valueName" />
+	</resultMap>
+	<select id="getAttributeValueList" resultMap="attributeValueList">
+		SELECT attr_value_id AS valueId, attr_value AS valueName FROM product_lib_attr_value WHERE status = 1;
+	</select>
+	
+	<select id="getAttributeIdOfGender" resultType="java.lang.String">
+		select attr_key_id from product_lib_attr_key where attr_key_code = "gender";
+	</select>
+</mapper>

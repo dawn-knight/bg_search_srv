@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbgo.mybatis.mbshop.mapper.ProductLibBrandMapper">
+	<resultMap id="BaseResultMap" type="com.mbgo.mybatis.mbshop.bean.ProductLibBrand">
+		<id column="brand_id" property="brandId" jdbcType="INTEGER" />
+		<result column="brand_code" property="brandCode" jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+		<result column="cname" property="cname" jdbcType="VARCHAR" />
+		<result column="ename" property="ename" jdbcType="VARCHAR" />
+		<result column="first_letter" property="firstLetter" jdbcType="VARCHAR" />
+		<result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="TINYINT" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.mbgo.mybatis.mbshop.bean.ProductLibBrand"
+		extends="BaseResultMap">
+		<result column="description" property="description" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		brand_id, brand_code, brand_name, cname, ename, first_letter, image_url, sort,
+		status,
+		create_time, update_time
+	</sql>
+	<sql id="Blob_Column_List">
+		description
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from product_lib_brand
+		where brand_id = #{brandId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from product_lib_brand
+		where brand_id = #{brandId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.mbgo.mybatis.mbshop.bean.ProductLibBrand">
+		insert into product_lib_brand (brand_id, brand_code, brand_name,
+		cname, ename, first_letter,
+		image_url, sort, status,
+		create_time, update_time, description
+		)
+		values (#{brandId,jdbcType=INTEGER}, #{brandCode,jdbcType=VARCHAR},
+		#{brandName,jdbcType=VARCHAR},
+		#{cname,jdbcType=VARCHAR}, #{ename,jdbcType=VARCHAR}, #{firstLetter,jdbcType=VARCHAR},
+		#{imageUrl,jdbcType=VARCHAR}, #{sort,jdbcType=TINYINT},
+		#{status,jdbcType=TINYINT},
+		#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{description,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.mbgo.mybatis.mbshop.bean.ProductLibBrand">
+		insert into product_lib_brand
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="brandId != null">
+				brand_id,
+			</if>
+			<if test="brandCode != null">
+				brand_code,
+			</if>
+			<if test="brandName != null">
+				brand_name,
+			</if>
+			<if test="cname != null">
+				cname,
+			</if>
+			<if test="ename != null">
+				ename,
+			</if>
+			<if test="firstLetter != null">
+				first_letter,
+			</if>
+			<if test="imageUrl != null">
+				image_url,
+			</if>
+			<if test="sort != null">
+				sort,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="brandId != null">
+				#{brandId,jdbcType=INTEGER},
+			</if>
+			<if test="brandCode != null">
+				#{brandCode,jdbcType=VARCHAR},
+			</if>
+			<if test="brandName != null">
+				#{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="cname != null">
+				#{cname,jdbcType=VARCHAR},
+			</if>
+			<if test="ename != null">
+				#{ename,jdbcType=VARCHAR},
+			</if>
+			<if test="firstLetter != null">
+				#{firstLetter,jdbcType=VARCHAR},
+			</if>
+			<if test="imageUrl != null">
+				#{imageUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				#{sort,jdbcType=TINYINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.mbgo.mybatis.mbshop.bean.ProductLibBrand">
+		update product_lib_brand
+		<set>
+			<if test="brandCode != null">
+				brand_code = #{brandCode,jdbcType=VARCHAR},
+			</if>
+			<if test="brandName != null">
+				brand_name = #{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="cname != null">
+				cname = #{cname,jdbcType=VARCHAR},
+			</if>
+			<if test="ename != null">
+				ename = #{ename,jdbcType=VARCHAR},
+			</if>
+			<if test="firstLetter != null">
+				first_letter = #{firstLetter,jdbcType=VARCHAR},
+			</if>
+			<if test="imageUrl != null">
+				image_url = #{imageUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				sort = #{sort,jdbcType=TINYINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where brand_id = #{brandId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mbgo.mybatis.mbshop.bean.ProductLibBrand">
+		update product_lib_brand
+		set brand_code = #{brandCode,jdbcType=VARCHAR},
+		brand_name = #{brandName,jdbcType=VARCHAR},
+		cname = #{cname,jdbcType=VARCHAR},
+		ename = #{ename,jdbcType=VARCHAR},
+		first_letter = #{firstLetter,jdbcType=VARCHAR},
+		image_url = #{imageUrl,jdbcType=VARCHAR},
+		sort = #{sort,jdbcType=TINYINT},
+		status = #{status,jdbcType=TINYINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		description = #{description,jdbcType=LONGVARCHAR}
+		where brand_id = #{brandId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.mbgo.mybatis.mbshop.bean.ProductLibBrand">
+		update product_lib_brand
+		set brand_code = #{brandCode,jdbcType=VARCHAR},
+		brand_name = #{brandName,jdbcType=VARCHAR},
+		cname = #{cname,jdbcType=VARCHAR},
+		ename = #{ename,jdbcType=VARCHAR},
+		first_letter = #{firstLetter,jdbcType=VARCHAR},
+		image_url = #{imageUrl,jdbcType=VARCHAR},
+		sort = #{sort,jdbcType=TINYINT},
+		status = #{status,jdbcType=TINYINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_time = #{updateTime,jdbcType=TIMESTAMP}
+		where brand_id = #{brandId,jdbcType=INTEGER}
+	</update>
+
+
+	<select id="selectList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from product_lib_brand
+	</select>
+
+
+	<select id="getBrandInfo" resultMap="brandMap">
+		SELECT brand_code AS brandCode, brand_name AS brandName, sort AS sortIndex FROM
+		product_lib_brand WHERE brand_name != '' AND `status` = 1;
+	</select>
+	<resultMap id="brandMap" type="com.mbgo.search.core.filter.brand.BrandBean">
+		<result property="code" column="brandCode" />
+		<result property="name" column="brandName" />
+		<result property="sortIndex" column="sortIndex" />
+	</resultMap>
+
+	<select id="getStoreInfo" resultMap="storeMap">
+		SELECT store_id AS storeCode, store_name AS storeName, sort AS sortIndex FROM store_info WHERE `status` = 1;
+	</select>
+	<resultMap id="storeMap" type="com.mbgo.search.core.filter.brand.BrandBean">
+		<result property="code" column="storeCode" />
+		<result property="name" column="storeName" />
+		<result property="sortIndex" column="sortIndex" />
+	</resultMap>
+</mapper>

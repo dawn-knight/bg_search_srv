@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbgo.mybatis.mbshop.mapper.ProductStoreBarcodeListMapper" >
+  <resultMap id="BaseResultMap" type="com.mbgo.mybatis.mbshop.bean.ProductStoreBarcodeList" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="barcode_id" property="barcodeId" jdbcType="VARCHAR" />
+    <result column="store_id" property="storeId" jdbcType="VARCHAR" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="color_code" property="colorCode" jdbcType="VARCHAR" />
+    <result column="color_name" property="colorName" jdbcType="VARCHAR" />
+    <result column="size_code" property="sizeCode" jdbcType="VARCHAR" />
+    <result column="size_name" property="sizeName" jdbcType="VARCHAR" />
+    <result column="spec_price" property="specPrice" jdbcType="DECIMAL" />
+    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+    <result column="product_sku" property="productSku" jdbcType="VARCHAR" />
+    <result column="product_barcode" property="productBarcode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, barcode_id, store_id, product_id, color_code, color_name, size_code, size_name, 
+    spec_price, product_code, product_sku, product_barcode, status, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_store_barcode_list
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from product_store_barcode_list
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mbgo.mybatis.mbshop.bean.ProductStoreBarcodeList" >
+    insert into product_store_barcode_list (id, barcode_id, store_id, 
+      product_id, color_code, color_name, 
+      size_code, size_name, spec_price, 
+      product_code, product_sku, product_barcode, 
+      status, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{barcodeId,jdbcType=VARCHAR}, #{storeId,jdbcType=VARCHAR}, 
+      #{productId,jdbcType=INTEGER}, #{colorCode,jdbcType=VARCHAR}, #{colorName,jdbcType=VARCHAR}, 
+      #{sizeCode,jdbcType=VARCHAR}, #{sizeName,jdbcType=VARCHAR}, #{specPrice,jdbcType=DECIMAL}, 
+      #{productCode,jdbcType=VARCHAR}, #{productSku,jdbcType=VARCHAR}, #{productBarcode,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mbgo.mybatis.mbshop.bean.ProductStoreBarcodeList" >
+    insert into product_store_barcode_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="barcodeId != null" >
+        barcode_id,
+      </if>
+      <if test="storeId != null" >
+        store_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="colorCode != null" >
+        color_code,
+      </if>
+      <if test="colorName != null" >
+        color_name,
+      </if>
+      <if test="sizeCode != null" >
+        size_code,
+      </if>
+      <if test="sizeName != null" >
+        size_name,
+      </if>
+      <if test="specPrice != null" >
+        spec_price,
+      </if>
+      <if test="productCode != null" >
+        product_code,
+      </if>
+      <if test="productSku != null" >
+        product_sku,
+      </if>
+      <if test="productBarcode != null" >
+        product_barcode,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="barcodeId != null" >
+        #{barcodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="colorCode != null" >
+        #{colorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="colorName != null" >
+        #{colorName,jdbcType=VARCHAR},
+      </if>
+      <if test="sizeCode != null" >
+        #{sizeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sizeName != null" >
+        #{sizeName,jdbcType=VARCHAR},
+      </if>
+      <if test="specPrice != null" >
+        #{specPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productSku != null" >
+        #{productSku,jdbcType=VARCHAR},
+      </if>
+      <if test="productBarcode != null" >
+        #{productBarcode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mbgo.mybatis.mbshop.bean.ProductStoreBarcodeList" >
+    update product_store_barcode_list
+    <set >
+      <if test="barcodeId != null" >
+        barcode_id = #{barcodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="storeId != null" >
+        store_id = #{storeId,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="colorCode != null" >
+        color_code = #{colorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="colorName != null" >
+        color_name = #{colorName,jdbcType=VARCHAR},
+      </if>
+      <if test="sizeCode != null" >
+        size_code = #{sizeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sizeName != null" >
+        size_name = #{sizeName,jdbcType=VARCHAR},
+      </if>
+      <if test="specPrice != null" >
+        spec_price = #{specPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="productCode != null" >
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productSku != null" >
+        product_sku = #{productSku,jdbcType=VARCHAR},
+      </if>
+      <if test="productBarcode != null" >
+        product_barcode = #{productBarcode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mbgo.mybatis.mbshop.bean.ProductStoreBarcodeList" >
+    update product_store_barcode_list
+    set barcode_id = #{barcodeId,jdbcType=VARCHAR},
+      store_id = #{storeId,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=INTEGER},
+      color_code = #{colorCode,jdbcType=VARCHAR},
+      color_name = #{colorName,jdbcType=VARCHAR},
+      size_code = #{sizeCode,jdbcType=VARCHAR},
+      size_name = #{sizeName,jdbcType=VARCHAR},
+      spec_price = #{specPrice,jdbcType=DECIMAL},
+      product_code = #{productCode,jdbcType=VARCHAR},
+      product_sku = #{productSku,jdbcType=VARCHAR},
+      product_barcode = #{productBarcode,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+	<!-- 自定义 -->
+	<select id="getColorProductSizes" resultMap="colorProductSizesMap" parameterType="com.mbgo.mybatis.commonbean.MybatisBean">
+	SELECT 
+		pbl.product_id AS productId,
+		pbl.color_code AS colorCode,
+		pbl.color_name AS colorName,
+		CONCAT(pbl.product_id, pbl.color_code) AS colorCodeId,
+		pbl.size_code AS sizeCode,
+		pbl.size_name AS sizeName,
+		pbl.spec_price As salePrice,
+		series.series_code AS seriesCode,
+		series.series_name AS seriesName,
+		psg.image_url AS imgUrl,
+		pbl.`status` AS sizeStatus
+	
+	FROM 
+		product_store_barcode_list pbl
+	INNER JOIN
+		product_lib_color color
+	ON pbl.color_code = color.color_code
+	INNER JOIN
+		product_lib_series series
+	ON color.series_code = series.series_code
+	LEFT JOIN	
+		product_store_gallery psg
+	ON 
+		pbl.product_id = psg.product_id
+		AND pbl.color_code = psg.color_code 
+	<if test="params != null and params.size > 0">
+	WHERE
+		pbl.size_code != '' AND pbl.size_name != '' AND
+		pbl.size_code IS NOT NULL AND pbl.size_name IS NOT NULL AND 
+		psg.image_type = 3 AND psg.image_type IS NOT NULL AND
+		pbl.product_id IN
+		<foreach item="item" index="index" collection="params" open="("
+			separator="," close=")">
+			#{item, jdbcType=VARCHAR}
+		</foreach>
+	</if>
+	<if test="params == null or params.size == 0 and max > 0 and first >= 0">
+		LIMIT #{first, jdbcType=BIGINT}, #{max, jdbcType=BIGINT}
+	</if>
+
+	</select>
+	<resultMap id="colorProductSizesMap" type="com.mbgo.search.core.bean.index.Product">
+		<id property="productId" column="productId" />
+		<collection property="colorProducts" ofType="com.mbgo.search.core.bean.index.ColorProduct">
+			<id property="colorCodeId" column="colorCodeId" />
+			<result property="colorCode" column="colorCode" />
+			<result property="colorName" column="colorName" />
+			<result property="seriesCode" column="seriesCode" />
+			<result property="seriesName" column="seriesName" />
+			<result property="imgUrl" column="imgUrl" />
+			<collection property="sizeList" ofType="com.mbgo.search.core.bean.index.SizeInfo">
+				<result property="sizeCode" column="sizeCode" />
+				<result property="sizeName" column="sizeName" />
+				<result property="sizeStatus" column="sizeStatus" />
+			</collection>
+		</collection>
+	</resultMap>
+	
+	
+	<select id="getMinSalePrice" resultMap="MinSalePriceMap" parameterType="com.mbgo.mybatis.commonbean.MybatisBean">
+	    SELECT 
+			product_id AS productId, MIN(spec_price) AS salesPrice
+		FROM
+			product_store_barcode_list
+			
+		<if test="params != null and params.size > 0">
+		WHERE
+			product_id IN
+			<foreach item="item" index="index" collection="params" open="("
+				separator="," close=")">
+				#{item, jdbcType=VARCHAR}
+			</foreach>
+		</if>
+		GROUP BY product_id
+		<if test="params == null or params.size == 0 and max > 0 and first >= 0">
+			LIMIT #{first, jdbcType=BIGINT}, #{max, jdbcType=BIGINT}
+		</if>
+	</select>
+	<resultMap id="MinSalePriceMap" type="com.mbgo.search.core.bean.index.Product">
+		<id property="productId" column="productId" />
+		<result property="salesPrice" column="salesPrice" />
+	</resultMap>
+</mapper>

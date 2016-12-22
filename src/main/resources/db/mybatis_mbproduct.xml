@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:beans xmlns:p="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd ">
+	<p:bean id="sqlSessionFactory_mbproduct" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<p:property name="mapperLocations" value="classpath*:com/metersbonwe/pcs/mapping/*.xml" />
+		<p:property name="dataSource" ref="datasource_mbproduct" />
+	</p:bean>
+
+	<p:bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<p:property name="dataSource" ref="datasource_mbproduct" />
+	</p:bean>
+
+	<p:bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<p:property name="basePackage" value="com.metersbonwe.pcs.dao" />
+		<p:property name="sqlSessionFactoryBeanName" value="sqlSessionFactory_mbproduct" />
+	</p:bean>
+</p:beans>

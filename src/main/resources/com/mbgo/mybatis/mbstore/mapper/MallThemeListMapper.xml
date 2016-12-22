@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbgo.mybatis.mbstore.mapper.MallThemeListMapper">
+  <resultMap id="themeListMap" type="com.mbgo.mybatis.mbstore.bean.MallThemeList" >
+   <result column="t_code" property="code" jdbcType="VARCHAR"></result>
+   <result column="show_type" property="showType" jdbcType="INTEGER"></result>
+   <result column="is_paging" property="isPaging" jdbcType="INTEGER"></result>
+  </resultMap>
+  <select id="getAllThemeList" resultMap="themeListMap">
+  select theme.t_code as code,theme.show_type as showType,theme.is_paging as isPaging
+   from  mall_theme_list as theme
+  </select>
+</mapper>

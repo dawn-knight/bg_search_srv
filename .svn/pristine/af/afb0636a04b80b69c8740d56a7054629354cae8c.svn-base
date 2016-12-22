@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbgo.mybatis.mbsearch.mapper.MgrSearchwordLogMapper" >
+  <resultMap id="BaseResultMap" type="com.mbgo.mybatis.mbsearch.bean.MgrSearchwordLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="word" property="word" jdbcType="VARCHAR" />
+    <result column="srcWord" property="srcWord" jdbcType="VARCHAR" />
+    <result column="newWord" property="newWord" jdbcType="VARCHAR" />
+    <result column="word_code" property="wordCode" jdbcType="VARCHAR" />
+    <result column="search_count" property="searchCount" jdbcType="BIGINT" />
+    <result column="rsCount" property="rsCount" jdbcType="BIGINT" />
+    <result column="add_time" property="addTime" jdbcType="BIGINT" />
+    <result column="end_time" property="endTime" jdbcType="BIGINT" />
+    <result column="dayDate" property="dayDate" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, word,srcWord,newWord,word_code, search_count,rsCount, add_time,end_time, dayDate
+  </sql>
+  <insert id="addWord" keyProperty="id" useGeneratedKeys="true" parameterType="com.mbgo.mybatis.mbsearch.bean.MgrSearchwordLog" >
+    insert into mgr_searchword_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="word != null" >
+        word,
+      </if>
+      <if test="srcWord != null" >
+        srcWord,
+      </if>
+      <if test="newWord != null" >
+        newWord,
+      </if>
+      <if test="wordCode != null" >
+        word_code,
+      </if>
+        <if test="searchCount != null" >
+        search_count,
+      </if>
+      <if test="rsCount != null" >
+        rsCount,
+      </if>
+    
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="dayDate != null" >
+        dayDate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="word != null" >
+        #{word,jdbcType=VARCHAR},
+      </if>
+      <if test="srcWord != null" >
+        #{srcWord,jdbcType=VARCHAR},
+      </if>
+      <if test="newWord != null" >
+        #{newWord,jdbcType=VARCHAR},
+      </if>
+      <if test="wordCode != null" >
+        #{wordCode,jdbcType=VARCHAR},
+      </if>
+      <if test="searchCount != null" >
+        #{searchCount,jdbcType=BIGINT},
+      </if>
+      <if test="rsCount != null" >
+        #{rsCount,jdbcType=BIGINT},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="dayDate != null" >
+        #{dayDate,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateWord" parameterType="com.mbgo.mybatis.mbsearch.bean.MgrSearchwordLog" >
+    update mgr_searchword_log
+    set search_count=search_count+1,end_time= #{endTime,jdbcType=BIGINT},rsCount= #{rsCount,jdbcType=BIGINT}
+    where word = #{word,jdbcType=VARCHAR} and dayDate = #{dayDate,jdbcType=DATE}
+  </update>
+  
+   <select id="selectByWordAndDate" resultMap="BaseResultMap" parameterType="com.mbgo.mybatis.mbsearch.bean.MgrSearchwordLog" >
+    select 
+    <include refid="Base_Column_List" />
+    from mgr_searchword_log
+    where word = #{word,jdbcType=VARCHAR} and dayDate = #{dayDate,jdbcType=DATE}
+  </select>
+</mapper>

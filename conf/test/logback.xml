@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration  scan="true" scanPeriod="50 seconds" >
+
+	<appender name="debugLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${catalina.base}/logs/MBgoSearchSrv_debug.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">  
+			<!-- rollover daily -->  
+			<fileNamePattern>${catalina.base}/logs/MBgoSearchSrv_debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+	      	<maxHistory>20</maxHistory>   
+	      	<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">  
+	        	<!-- or whenever the file size reaches 100MB -->  
+	        	<maxFileSize>300MB</maxFileSize>  
+	      	</timeBasedFileNamingAndTriggeringPolicy>  
+	    </rollingPolicy> 
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %m%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter"> 
+			<level>debug</level> 
+			<onMatch>ACCEPT</onMatch> 
+			<onMismatch>DENY</onMismatch> 
+	    </filter> 
+	</appender> 
+	
+	<appender name="errorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${catalina.base}/logs/MBgoSearchSrv_error.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">  
+			<!-- rollover daily -->  
+			<fileNamePattern>${catalina.base}/logs/MBgoSearchSrv_error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+	      	<maxHistory>20</maxHistory>   
+	      	<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">  
+	        	<!-- or whenever the file size reaches 100MB -->  
+	        	<maxFileSize>300MB</maxFileSize>  
+	      	</timeBasedFileNamingAndTriggeringPolicy>  
+	    </rollingPolicy> 
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS}, [%thread] [%c,%L] %m%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter"> 
+			<level>error</level> 
+			<onMatch>ACCEPT</onMatch> 
+			<onMismatch>DENY</onMismatch> 
+	    </filter> 
+	</appender> 
+	
+	
+	<appender name="timeLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${catalina.base}/logs/MBgoSearchSrv_time.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">  
+			<!-- rollover daily -->  
+			<fileNamePattern>${catalina.base}/logs/MBgoSearchSrv_time-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+	      	<maxHistory>20</maxHistory>   
+	      	<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">  
+	        	<!-- or whenever the file size reaches 100MB -->  
+	        	<maxFileSize>100MB</maxFileSize>  
+	      	</timeBasedFileNamingAndTriggeringPolicy>  
+	    </rollingPolicy> 
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %m%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter"> 
+			<level>info</level> 
+			<onMatch>ACCEPT</onMatch> 
+			<onMismatch>DENY</onMismatch> 
+	    </filter> 
+	</appender> 
+	
+	<!-- 控制台输出 -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+		    <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %msg：日志消息，%n是换行符-->
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %m%n</pattern>
+		</encoder>
+	</appender>
+	
+	<logger name="org.apache.zookeeper"><level value="off"/></logger>	
+	<logger name="com.mbgo.mybatis"><level value="off"/></logger>	
+    <logger name="java.sql"><level value="off" /></logger>
+    <logger name="org.mybatis"><level value="off" /></logger>
+	<logger name="org.springframework"><level value="off" /></logger>
+	<logger name="com.metersbonwe.pcs"><level value="off" /></logger>
+<!-- 	 
+	<logger name="com.mbgo.search.controller">	
+        <level value="debug"/>
+        <appender-ref ref="timeLog"/>
+        <addtivity>false</addtivity>
+    </logger>
+ -->
+	<root>
+		<level value="debug" />
+		<appender-ref ref="debugLog" />
+		<appender-ref ref="errorLog" />
+	</root>
+
+</configuration>

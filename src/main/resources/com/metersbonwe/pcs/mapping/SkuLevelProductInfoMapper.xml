@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.pcs.dao.SkuLevelProductInfoMapper">
+	<resultMap id="product" type="com.mbgo.search.core.bean.index.Product">
+		<id property="productUuid" column="productUuid" />
+		<collection property="colorProducts"
+			ofType="com.mbgo.search.core.bean.index.ColorProduct">
+			<id property="colorCodeId" column="colorCodeId" />
+			<result property="colorCode" column="colorCode" />
+			<result property="colorName" column="colorName" />
+			<result property="colorSeriesCode" column="colorSeriesCode" />
+			<result property="colorSeriesName" column="colorSeriesName" />
+			<result property="imgUrl" column="imgUrl" />
+			<collection property="sizeList"
+				ofType="com.mbgo.search.core.bean.index.SizeInfo">
+				<id property="sku" column="sku" />
+				<result property="sizeCode" column="sizeCode" />
+				<result property="sizeName" column="sizeName" />
+				<result property="sizeSeriesCode" column="sizeSeriesCode" />
+				<result property="sizeSeriesName" column="sizeSeriesName" />
+				<result property="sizeStatus" column="sizeStatus" />
+			</collection>
+		</collection>
+	</resultMap>
+
+	<select id="getProductList" resultMap="product"
+		parameterType="com.mbgo.mybatis.commonbean.MybatisBean">
+		SELECT
+		CONCAT(channel_barcode.channel_code,
+		channel_barcode.product_sys_code) AS productUuid,
+		channel_barcode.sale_attr1_value_code AS colorCode,
+		channel_barcode.sale_attr1_value AS colorName,
+		CONCAT(channel_barcode.channel_code,channel_barcode.product_sys_code,
+		channel_barcode.sale_attr1_value_code) AS colorCodeId,
+		channel_barcode.sale_attr2_value_code AS sizeCode,
+		channel_barcode.sale_attr2_value AS sizeName,
+		channel_barcode.status AS
+		sizeStatus,
+		attr_series.series_id AS colorSeriesCode,
+		attr_series.series_name AS colorSeriesName,
+
+		gallery.image_url AS
+		imgUrl,
+		channel_barcode.barcode_sys_code AS sku
+		FROM
+		product_channel_goods_barcode AS channel_barcode
+		LEFT JOIN
+		product_lib_attr_value AS attr_value
+		ON
+		channel_barcode.sale_attr1_value_code = attr_value.attr_value_code
+		LEFT JOIN
+		product_lib_attr_series_relate AS attr_series_relate
+		ON
+		attr_value.attr_value_id = attr_series_relate.attr_value_id AND
+		attr_series_relate.attr_key_id = 1
+		LEFT JOIN
+		product_lib_attr_series
+		AS
+		attr_series
+		ON
+		attr_series_relate.series_id =
+		attr_series.series_id
+
+		LEFT
+		JOIN
+		product_seller_goods_gallery gallery
+		ON
+		channel_barcode.product_sys_code = gallery.product_sys_code AND
+		channel_barcode.sale_attr1_value_code
+		= gallery.color_code
+
+		WHERE
+		attr_value.status = 1
+
+		AND
+		channel_barcode.status = 1
+		AND
+		attr_series.status = 1
+
+		AND channel_barcode.sale_attr1_value_code !=
+		''
+		AND
+		channel_barcode.sale_attr1_value_code IS NOT NULL
+		AND
+		channel_barcode.sale_attr1_value != '' AND
+		channel_barcode.sale_attr1_value IS NOT NULL
+		AND
+		channel_barcode.sale_attr2_value_code != '' AND
+		channel_barcode.sale_attr2_value_code IS NOT NULL
+		AND
+		channel_barcode.sale_attr2_value != '' AND
+		channel_barcode.sale_attr2_value IS NOT NULL
+		AND gallery.status = 1
+		AND
+		gallery.image_type = 3
+
+		<if test="pid != null and pid != ''">
+			and channel_barcode.channel_code != #{pid,
+			jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.size > 0">
+			and
+			<foreach item="item" index="index" collection="params" open="("
+				separator=" or " close=")">
+				channel_barcode.product_sys_code = #{item,
+				jdbcType=VARCHAR}
+			</foreach>
+		</if>
+		<if test="params == null or params.size == 0 and max > 0 and first >= 0">
+			LIMIT #{first, jdbcType=BIGINT}, #{max, jdbcType=BIGINT}
+		</if>
+	</select>
+
+
+
+	<select id="getIdListOfGoodsSkuLevelInfoChanged" resultType="java.lang.String"
+		parameterType="com.mbgo.mybatis.commonbean.GettingUpdatedChannelGoodIdListParam">
+		select
+		CONCAT(channel_code,product_sys_code) AS productUuid
+		from
+		product_channel_goods_barcode
+		where
+		last_update_date >=
+		#{updatedTimePointStr}
+		<if test="channelCode != null and channelCode != ''">
+			and channel_code != #{channelCode}
+		</if>
+		group by productUuid
+	</select>
+
+
+	<select id="getSizeSeriesInfo" resultMap="sizeSeriesInfo">
+		SELECT
+		attr_value.attr_value_code AS sizeCode,
+		attr_series.series_id AS
+		sizeSeriesCode,
+		attr_series.series_name AS sizeSeriesName
+		FROM
+		product_lib_attr_series_relate AS attr_series_relate
+		LEFT JOIN
+		product_lib_attr_value AS attr_value
+		ON
+		attr_series_relate.attr_value_id = attr_value.attr_value_id
+		LEFT JOIN
+		product_lib_attr_series AS attr_series
+		ON
+		attr_series_relate.series_id =
+		attr_series.series_id
+		WHERE
+		attr_series_relate.attr_key_id = 2
+		AND
+		attr_series.status = 1
+	</select>
+	<resultMap id="sizeSeriesInfo" type="com.mbgo.search.core.bean.index.SizeInfo">
+		<id property="sizeCode" column="sizeCode" />
+		<result property="sizeSeriesCode" column="sizeSeriesCode" />
+		<result property="sizeSeriesName" column="sizeSeriesName" />
+	</resultMap>
+
+
+	<!-- not used -->
+	<resultMap id="productWithMinSalePrice" type="com.mbgo.search.core.bean.index.Product">
+		<id property="productId" column="productId" />
+		<result property="salesPrice" column="salesPrice" />
+	</resultMap>
+	<select id="getListOfProductWithMinSalePrice" resultMap="productWithMinSalePrice"
+		parameterType="com.mbgo.mybatis.commonbean.MybatisBean">
+		SELECT
+		product_sys_code AS productId, spec_price AS salesPrice
+		FROM
+		product_channel_goods_price
+		<if test="params != null and params.size > 0">
+			WHERE
+			<foreach item="item" index="index" collection="params" open="("
+				separator=" or " close=")">
+				product_sys_code = #{item, jdbcType=VARCHAR}
+			</foreach>
+		</if>
+		<if test="params == null or params.size == 0 and max > 0 and first >= 0">
+			LIMIT #{first, jdbcType=BIGINT}, #{max, jdbcType=BIGINT}
+		</if>
+	</select>
+
+</mapper>

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.metersbonwe.pcs.dao.ExtendedProductChannelGoodsMapper">
+	<resultMap id="channelProduct" type="com.mbgo.search.core.bean.index.Product">
+		<id property="productUuid" column="productUuid" />
+		<result property="channelCode" column="channelCode" />
+		<result property="productId" column="productId" />
+		<result property="storeId" column="storeId" />
+		<result property="brandCode" column="brandCode" />
+		<result property="brandName" column="brandName" />
+		<result property="productCode" column="productCode" />
+		<result property="productName" column="productName" />
+		<result property="marketPrice" column="marketPrice" />
+		<result property="salesPrice" column="salesPrice" />
+		<result property="updateTime" column="updateTime" />
+		<result property="imgUrl" column="imgUrl" />
+		<result property="createTime" column="createTime" />
+		<result property="categoryId" column="categoryId" />
+		<result property="categoryName" column="categoryName" />
+		<result property="onSaleDate" column="onSaleDate" />
+		<result property="firstOnSellData" column="firstOnSellData" />
+	</resultMap>
+
+	<select id="getChannelProductList" resultMap="channelProduct"
+		parameterType="com.mbgo.mybatis.commonbean.MybatisBean">
+		select
+		CONCAT(channel_goods.channel_code,
+		channel_goods.product_sys_code) AS productUuid,
+		channel_goods.first_on_sell_data as firstOnSellData,
+		channel_goods.on_sale_date as onSaleDate,
+		channel_goods.product_sys_code as productId,
+		channel_goods.product_sys_code as productCode,
+		channel_goods.product_name as productName,
+		channel_goods.channel_code
+		as channelCode,
+		seller_goods.brand_id as brandId,
+		brand.brand_code as
+		brandCode,
+		brand.brand_name as brandName,
+		seller_goods.market_price as
+		marketPrice,
+		min(price.spec_price) as salesPrice,
+		seller_goods.category_id as categoryId,
+		category.cate_name as
+		categoryName,
+		channel_goods.last_update_date as updateTime,
+		seller_goods.product_url as imgUrl,
+		channel_goods.create_date as
+		createTime,
+		channel_goods.status as pStatus
+		from
+		product_channel_goods as
+		channel_goods
+		inner join
+		product_seller_goods as seller_goods
+		on
+		channel_goods.product_sys_code = seller_goods.product_sys_code
+		left
+		join
+		product_channel_goods_price as price
+		on
+		channel_goods.product_sys_code = price.product_sys_code and
+		channel_goods.channel_code = price.channel_code
+		left join
+		product_lib_brand as brand
+		on
+		seller_goods.brand_id = brand.brand_id
+		left join
+		product_lib_category as category
+		on
+		seller_goods.category_id =
+		category.category_id
+		where
+		channel_goods.status = 1
+		and
+		seller_goods.status = 1
+		and price.status = 1
+		<if test="pid != null and pid != ''">
+			and channel_goods.channel_code != #{pid, jdbcType=VARCHAR}
+
+			and price.channel_code != #{pid, jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.size > 0">
+			and
+			<foreach item="item" index="index" collection="params" open="("
+				separator=" or " close=")">
+				channel_goods.product_sys_code = #{item,
+				jdbcType=VARCHAR}
+			</foreach>
+		</if>
+		group by price.channel_code,channel_goods.product_sys_code
+		<if test="params == null or params.size == 0 and max > 0 and first >= 0">
+			LIMIT #{first, jdbcType=BIGINT}, #{max, jdbcType=BIGINT}
+		</if>
+	</select>
+
+	<select id="getChannelGoodAttributeList" resultMap="channelGoodAttributeList"
+		parameterType="com.mbgo.mybatis.commonbean.MybatisBean">
+		select
+		CONCAT(channel_goods.channel_code,
+		channel_goods.product_sys_code) AS productUuid,
+		base_goods_attr.attr_key_id as keyId,
+		a_key.attr_key_name as keyName,
+		base_goods_attr.attr_value_id as valueId,
+		a_value.attr_value as value,
+		attr_series.series_id AS sizeSeriesCode,
+		attr_series.series_name AS
+		sizeSeriesName
+		from
+		product_channel_goods as channel_goods
+		inner join
+		product_seller_goods as base_goods
+		on
+		channel_goods.product_sys_code =
+		base_goods.product_sys_code
+		left join
+		product_seller_goods_attr as
+		base_goods_attr
+		on
+		channel_goods.product_sys_code =
+		base_goods_attr.product_sys_code
+		left join
+		product_lib_attr_key as a_key
+		on
+		base_goods_attr.attr_key_id = a_key.attr_key_id
+		left join
+		product_lib_attr_value as a_value
+		on
+		base_goods_attr.attr_value_id =
+		a_value.attr_value_id
+		LEFT JOIN
+		product_lib_attr_series_relate AS
+		attr_series_relate
+		ON
+		base_goods_attr.attr_value_id =
+		attr_series_relate.attr_value_id
+		LEFT JOIN
+		product_lib_attr_series AS
+		attr_series
+		ON
+		attr_series_relate.series_id = attr_series.series_id
+		where
+		channel_goods.status = 1
+		and base_goods.status = 1
+		and a_key.status
+		= 1
+		and a_value.status = 1
+		AND attr_series.status = 1
+		<if test="pid != null and pid != ''">
+			and channel_goods.channel_code != #{pid, jdbcType=VARCHAR}
+		</if>
+		<if test="params != null and params.size > 0">
+			and
+			<foreach item="item" index="index" collection="params" open="("
+				separator=" or " close=")">
+				channel_goods.product_sys_code = #{item,
+				jdbcType=VARCHAR}
+			</foreach>
+		</if>
+		<if test="params == null or params.size == 0 and max > 0 and first >= 0">
+			LIMIT #{first, jdbcType=BIGINT}, #{max, jdbcType=BIGINT}
+		</if>
+	</select>
+	<resultMap id="channelGoodAttributeList" type="com.mbgo.search.core.bean.index.Product">
+		<id property="productUuid" column="productUuid" />
+		<collection property="values"
+			ofType="com.mbgo.search.core.bean.index.AttrValue">
+			<result property="key" column="keyId" />
+			<result property="keyName" column="keyName" />
+			<result property="code" column="valueId" />
+			<result property="name" column="value" />
+			<result property="seriesName" column="sizeSeriesName" />
+			<result property="seriesCode" column="sizeSeriesCode" />
+		</collection>
+	</resultMap>
+
+	<select id="getUpdatedChannelGoodIdList" resultType="java.lang.String"
+		parameterType="com.mbgo.mybatis.commonbean.GettingUpdatedChannelGoodIdListParam">
+		select
+		CONCAT(channel_code,product_sys_code) AS productUuid
+		from
+		product_channel_goods
+		where
+		last_update_date >=
+		#{updatedTimePointStr}
+		<if test="channelCode != null and channelCode != ''">
+			and channel_code != #{channelCode}
+		</if>
+		group by productUuid
+	</select>
+
+	<select id="getIdListOfGoodsPriceChanged" resultType="java.lang.String"
+		parameterType="com.mbgo.mybatis.commonbean.GettingUpdatedChannelGoodIdListParam">
+		select
+		product_sys_code
+		from
+		product_channel_goods_price
+		where
+		last_update_date >= #{updatedTimePointStr}
+		<if test="channelCode != null and channelCode != ''">
+			and channel_code != #{channelCode}
+		</if>
+		group by product_sys_code
+	</select>
+
+	<select id="getIdListOfGoodsAttributeChanged" resultType="java.lang.String"
+		parameterType="com.mbgo.mybatis.commonbean.GettingUpdatedChannelGoodIdListParam">
+		select
+		product_sys_code
+		from
+		product_seller_goods_attr
+		where
+		last_update_date >= #{updatedTimePointStr}
+		group by
+		product_sys_code
+	</select>
+
+	<select id="getIdListOfGoodsColorMapChanged" resultType="java.lang.String"
+		parameterType="com.mbgo.mybatis.commonbean.GettingUpdatedChannelGoodIdListParam">
+		select
+		product_sys_code
+		from
+		product_seller_goods_gallery
+		where
+		last_update_date >= #{updatedTimePointStr}
+		group by
+		product_sys_code
+	</select>
+	<select id="getChannelProductIdList" resultType="java.lang.String"
+		parameterType="com.mbgo.mybatis.commonbean.MybatisBean">
+		SELECT
+		product_sys_code
+		FROM
+		product_channel_goods
+		WHERE
+		STATUS = 1
+		<if test="pid != null and pid != ''">
+			and product_channel_goods.channel_code != #{pid,
+			jdbcType=VARCHAR}
+		</if>
+		GROUP BY product_sys_code
+		<if test="params == null or params.size == 0 and max > 0 and first >= 0">
+			LIMIT #{first, jdbcType=BIGINT}, #{max, jdbcType=BIGINT}
+		</if>
+	</select>
+	<select id="countAll" resultType="java.lang.Integer">
+		SELECT
+		COUNT(DISTINCT
+		product_sys_code)
+		FROM
+		product_channel_goods
+		WHERE
+		STATUS =
+		1
+		AND
+		channel_code != "HQ01S117"
+	</select>
+</mapper>

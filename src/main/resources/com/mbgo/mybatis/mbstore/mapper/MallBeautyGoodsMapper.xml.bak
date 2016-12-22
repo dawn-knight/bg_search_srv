@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbgo.mybatis.mbstore.mapper.MallBeautyGoodsMapper">
+	<!-- 自定义 -->
+	<select id="getProductBeautys" resultMap="productBeautysMap"
+		parameterType="com.mbgo.mybatis.commonbean.MybatisBean">
+		SELECT
+		CONCAT(mbl.channel_code,
+		mbg.product_sys_code) AS productUuid,
+		mbl.beauty_code AS beautyCode,
+		mbl.beauty_title AS beautyName,
+		mbg.sort
+		AS sortOrder
+		FROM
+		mall_beauty_list mbl,
+		mall_beauty_goods mbg
+		WHERE
+		mbg.`status` = 1 AND
+		mbl.`status` = 1 AND
+		mbl.beauty_id = mbg.beauty_id
+		<if test="params != null and params.size > 0">
+			AND mbg.product_sys_code IN
+			<foreach item="item" index="index" collection="params" open="("
+				separator="," close=")">
+				#{item, jdbcType=VARCHAR}
+			</foreach>
+		</if>
+		<if test="params == null or params.size == 0 and max > 0 and first >= 0">
+			LIMIT #{first, jdbcType=BIGINT}, #{max, jdbcType=BIGINT}
+		</if>
+
+	</select>
+	<resultMap id="productBeautysMap" type="com.mbgo.search.core.bean.index.ProductBeauty">
+		<id property="productUuid" column="productUuid" />
+		<collection property="beautys"
+			ofType="com.mbgo.search.core.bean.index.BeautyInfo">
+			<result property="code" column="beautyCode" />
+			<result property="title" column="beautyName" />
+			<result property="order" column="sortOrder" />
+		</collection>
+	</resultMap>
+	<!-- 获取更新商品的id -->
+	<select id="getUpdatedBeautyInfoProductIds" resultType="String"
+		parameterType="java.lang.String">
+		SELECT
+		product_sys_code FROM mall_beauty_goods
+		WHERE
+		last_update_date >=#{updateTime}
+		group by product_sys_code
+	</select>
+
+</mapper>

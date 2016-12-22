@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbgo.mybatis.mbstore.mapper.MallThemeGoodsMapper">
+	<!-- 自定义 -->
+	<select id="getProductThemes" resultMap="productThemesMap"
+		parameterType="com.mbgo.mybatis.commonbean.MybatisBean">
+		SELECT
+		mtg.gid AS productId,
+		mtl.t_code AS themeCode,
+		mtl.t_title AS
+		themeName,
+		mtg.sort_order AS sortOrder
+		FROM mall_theme_list AS mtl
+		RIGHT
+		JOIN
+		mall_theme_goods AS mtg
+		ON mtl.t_code =
+		mtg.theme_code
+		WHERE
+		mtg.`status` = 1 AND
+		mtl.`t_status` = 1
+		AND NOW() >=
+		mtl.start_time
+		AND
+		mtl.end_time >= NOW()
+		<if test="params != null and params.size > 0">
+			AND mtg.gid IN
+			<foreach item="item" index="index" collection="params" open="("
+				separator="," close=")">
+				#{item, jdbcType=VARCHAR}
+			</foreach>
+		</if>
+		<if test="params == null or params.size == 0 and max > 0 and first >= 0">
+			LIMIT #{first, jdbcType=BIGINT}, #{max, jdbcType=BIGINT}
+		</if>
+
+	</select>
+	<resultMap id="productThemesMap" type="com.mbgo.search.core.bean.index.ProductTheme">
+		<id property="productId" column="productId" />
+		<collection property="themes"
+			ofType="com.mbgo.search.core.bean.index.ThemeInfo">
+			<result property="code" column="themeCode" />
+			<result property="title" column="themeName" />
+			<result property="order" column="sortOrder" />
+		</collection>
+	</resultMap>
+	<!-- 获取更新商品的id -->
+	<select id="getUpdatedThemeInfoProductIds" resultType="String"
+		parameterType="java.lang.String">
+		SELECT
+		gid
+		FROM
+		mall_theme_goods
+		WHERE
+		update_time
+		>=#{updateTime}
+		group by gid
+	</select>
+	<!-- 获取更新的主题编码 -->
+	<select id="getUpdatedThemeCodes" resultType="String"
+		parameterType="java.lang.String">
+		SELECT
+		t_code
+		FROM
+		mall_theme_list
+		WHERE
+		update_time
+		>=#{updateTime}
+		GROUP BY t_code
+	</select>
+</mapper>

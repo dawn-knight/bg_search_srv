@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbgo.mybatis.mbsearch.mapper.MgrHotKeywordMapper">
+	<resultMap id="BaseResultMap" type="com.mbgo.mybatis.mbsearch.bean.MgrHotKeyword">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="word" property="word" jdbcType="VARCHAR" />
+		<result column="word_code" property="wordCode" jdbcType="VARCHAR" />
+		<result column="search_count" property="searchCount" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="BIGINT" />
+		<result column="last_update" property="lastUpdate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, word, word_code, search_count, add_time, last_update
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from mgr_hot_keyword
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from mgr_hot_keyword
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.mbgo.mybatis.mbsearch.bean.MgrHotKeyword">
+		insert into mgr_hot_keyword (id, word, word_code,
+		search_count, add_time, last_update
+		)
+		values (#{id,jdbcType=BIGINT}, #{word,jdbcType=VARCHAR},
+		#{wordCode,jdbcType=VARCHAR},
+		#{searchCount,jdbcType=BIGINT}, #{addTime,jdbcType=BIGINT}, #{lastUpdate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.mbgo.mybatis.mbsearch.bean.MgrHotKeyword">
+		insert into mgr_hot_keyword
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="word != null">
+				word,
+			</if>
+			<if test="wordCode != null">
+				word_code,
+			</if>
+			<if test="searchCount != null">
+				search_count,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="lastUpdate != null">
+				last_update,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="word != null">
+				#{word,jdbcType=VARCHAR},
+			</if>
+			<if test="wordCode != null">
+				#{wordCode,jdbcType=VARCHAR},
+			</if>
+			<if test="searchCount != null">
+				#{searchCount,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=BIGINT},
+			</if>
+			<if test="lastUpdate != null">
+				#{lastUpdate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.mbgo.mybatis.mbsearch.bean.MgrHotKeyword">
+		update mgr_hot_keyword
+		<set>
+			<if test="word != null">
+				word = #{word,jdbcType=VARCHAR},
+			</if>
+			<if test="wordCode != null">
+				word_code = #{wordCode,jdbcType=VARCHAR},
+			</if>
+			<if test="searchCount != null">
+				search_count = #{searchCount,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=BIGINT},
+			</if>
+			<if test="lastUpdate != null">
+				last_update = #{lastUpdate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.mbgo.mybatis.mbsearch.bean.MgrHotKeyword">
+		update mgr_hot_keyword
+		set word = #{word,jdbcType=VARCHAR},
+		word_code = #{wordCode,jdbcType=VARCHAR},
+		search_count = #{searchCount,jdbcType=BIGINT},
+		add_time = #{addTime,jdbcType=BIGINT},
+		last_update = #{lastUpdate,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!-- 自定义 -->
+	<select id="countAll" resultType="java.lang.Long">
+		SELECT COUNT(id) FROM
+		mgr_hot_keyword;
+	</select>
+	<select id="getHotKeyword" resultMap="hotKeywordMap" parameterType="com.mbgo.mybatis.commonbean.MybatisBean">
+		SELECT 
+			word,
+			search_count
+		
+		FROM
+			mgr_hot_keyword
+		<if test="params == null or params.size == 0 and max > 0 and first >= 0">
+			LIMIT #{first, jdbcType=BIGINT}, #{max, jdbcType=BIGINT}
+		</if>
+	</select>
+	<resultMap id="hotKeywordMap" type="com.mbgo.mybatis.mbsearch.bean.MgrHotKeyword">
+		<result column="word" property="word" jdbcType="VARCHAR" />
+		<result column="search_count" property="searchCount" jdbcType="BIGINT" />
+	</resultMap>
+</mapper>
